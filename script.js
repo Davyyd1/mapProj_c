@@ -23,13 +23,29 @@ if (navigator.geolocation) {
       const coords = [latitude, longitude];
       const map = L.map('map').setView(coords, 13);
 
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution:
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
 
-      L.marker(coords).addTo(map).bindPopup('hei').openPopup();
+      
+
+      map.on('click', function(mapEvent){
+        console.log(mapEvent);
+        const {lat, lng} = mapEvent.latlng;
+        
+        L.marker([lat,lng]).addTo(map).bindPopup(L.popup({
+          maxWidth:250,
+          minWidth:150,
+          autoClose: false,
+          closeOnClick: false,
+          className: 'running-popup'
+        }))
+        .setPopupContent('Workout')
+        .openPopup();
+      })
+
     },
     function () {
       alert(`Could not get your position`);
