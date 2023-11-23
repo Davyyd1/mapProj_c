@@ -113,6 +113,18 @@ class App {
     inputDistance.focus();
   }
 
+  _hideForm() {
+    //empty inputs
+    inputDistance.value =
+      inputDuration.value =
+      inputElevation.value =
+      inputCadence.value =
+        '';
+    form.style.display = 'none';
+    form.classList.add('hidden');
+    setTimeout(() => (form.style.display = 'grid'), 1000);
+  }
+
   _toggleElevationField() {
     inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
     inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
@@ -159,7 +171,6 @@ class App {
 
     // add new object to workout array
     this.#workouts.push(workout);
-    console.log(workout);
 
     // render workout on map as market
     this._renderWorkoutMarker(workout);
@@ -168,11 +179,7 @@ class App {
     this._renderWorkout(workout);
 
     // hide form + clear input fiels
-    inputDistance.value =
-      inputDuration.value =
-      inputElevation.value =
-      inputCadence.value =
-        '';
+    this._hideForm();
   }
 
   _renderWorkoutMarker(workout) {
@@ -187,7 +194,9 @@ class App {
           className: `${workout.type}-popup`,
         })
       )
-      .setPopupContent('bau')
+      .setPopupContent(
+        `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
+      )
       .openPopup();
   }
 
@@ -209,7 +218,7 @@ class App {
       </div>
     `;
 
-    if (workout.type === 'runninng')
+    if (workout.type === 'running')
       html += `
           <div class="workout__details">
             <span class="workout__icon">⚡️</span>
